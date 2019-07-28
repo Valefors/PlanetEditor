@@ -5,39 +5,82 @@ using UnityEngine;
 
 public class LevelEditorWindow : EditorWindow
 {
-    string _title = "yo";
-    Color _color;
+    string _titleFile = "LEVEL_01";
+    Planet _planet;
+    PersistantStorage _storage;
+    string _feedBack = "";
+    //Color _color;
 
-    [MenuItem("Level Editor/Modify")]
-    static void ShowWindow()
+    //int _selGridInt = 0;
+    string[] _buttonsNamesArray = { "Save Level", "Load Level", "Save new Level" };
+
+    [InitializeOnLoadMethod]
+    static void Init()
+    {
+        Planet.OnOpenWindow += ShowWindow;
+    }
+
+    [MenuItem("Level Editor/Save Level")]
+    public static void ShowWindow()
     {
         EditorWindow.GetWindow<LevelEditorWindow>("Edit level");
     }
 
     private void OnGUI()
     {
-        GUILayout.Label("You can update your level", EditorStyles.boldLabel);
+        GUILayout.Space(10);
 
-        _title = EditorGUILayout.TextField("Name", _title);
-        _color = EditorGUILayout.ColorField("Color", _color);
+        GUILayout.Label("Save your level here.", EditorStyles.boldLabel);
 
-        if(GUILayout.Button("SAVE ME"))
+        GUILayout.Space(10);
+
+        _titleFile = EditorGUILayout.TextField("Name", _titleFile);
+
+        GUILayout.Space(10);
+        //_selGridInt = GUILayout.SelectionGrid(_selGridInt, _buttonsNamesArray, 3);
+        //_color = EditorGUILayout.ColorField("Color", _color);
+
+        GUILayout.BeginHorizontal("Box");
+        if (GUILayout.Button("Save Level"))
         {
-            Colorize();
+            SaveFile();
+            _feedBack = "Level Saved!";
         }
-            
+
+        GUILayout.Space(15);
+
+        if (GUILayout.Button("Load Level"))
+        {
+            LoadFile();
+            _feedBack = "Level Loaded!";
+        }
+
+        GUILayout.Space(15);
+
+        if (GUILayout.Button("New Level"))
+        {
+            if (Planet.instance != null) Planet.instance.SaveDatas();
+        }
+
+        GUILayout.EndHorizontal();
+
+        GUILayout.Space(15);
+
+        GUILayout.Label(_feedBack, EditorStyles.boldLabel);
     }
 
-    void Colorize()
+    void SaveFile()
     {
-        Debug.Log("saved!");
-        foreach (GameObject go in Selection.gameObjects)
+        if (Planet.instance != null)
         {
-            Renderer renderer = go.GetComponent<Renderer>();
-            if (renderer != null)
-            {
-                renderer.sharedMaterial.color = _color;
-            }
+            PersistantStorage.UpdateSaveName(_titleFile);
+            Planet.instance.SaveDatas();
         }
+    }
+
+    void LoadFile()
+    {
+        string path = EditorUtility.OpenFilePanel("Choose a save", "", "");
+        Planet.instance.storage.Load(path, Planet.instance);
     }
 }

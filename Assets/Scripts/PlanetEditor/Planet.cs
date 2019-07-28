@@ -5,14 +5,26 @@ using UnityEngine;
 
 public class Planet : PersistantObject
 {
-    [SerializeField] PersistantStorage _storage;
+    public PersistantStorage storage;
     List<Cell> _cells;
 
     public KeyCode saveKey = KeyCode.S;
     public KeyCode loadKey = KeyCode.L;
 
+    public static Planet instance {
+        get { return _instance; }
+    }
+
+    static Planet _instance = null;
+
+    public delegate void OpenWindowDelegate();
+    public static OpenWindowDelegate OnOpenWindow;
+
     private void Awake()
     {
+        if (_instance != null) Destroy(_instance);
+        _instance = this;
+
         _cells = new List<Cell>();
         FillArray();
     }
@@ -30,16 +42,26 @@ public class Planet : PersistantObject
         }
     }
 
-    void Update()
+    void OpenEditorWindow()
+    {
+        if (OnOpenWindow != null) OnOpenWindow();
+    }
+
+    /*void Update()
     {
         if (Input.GetKeyDown(saveKey))
         {
-            _storage.Save(this);
+            if (OnOpenWindow != null) OnOpenWindow();
         }
         else if (Input.GetKeyDown(loadKey))
         {
-            _storage.Load(this);
+            storage.Load(this);
         }
+    }*/
+
+    public void SaveDatas()
+    {
+        storage.Save(this);
     }
 
     /// <summary>
@@ -70,6 +92,16 @@ public class Planet : PersistantObject
         }
     }
 
+    private void OnGUI()
+    {
+        GUIStyle lCustomStyle = new GUIStyle("button");
+        lCustomStyle.fontSize = 30;
+
+        if (GUILayout.Button("Open new Window...", lCustomStyle))
+        {
+            if (OnOpenWindow != null) OnOpenWindow();
+        }
+    }
     private void OnDestroy()
     {
         _cells.Clear();

@@ -258,7 +258,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9b7ef3e365c27a48b01445f9a7863c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _storage: {fileID: 1037764418}
+  storage: {fileID: 1037764418}
   saveKey: 115
   loadKey: 108
 --- !u!114 &61271467
@@ -9509,7 +9509,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9b7ef3e365c27a48b01445f9a7863c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _storage: {fileID: 1037764418}
+  storage: {fileID: 0}
   saveKey: 115
   loadKey: 108
 --- !u!114 &1311538143272173038
