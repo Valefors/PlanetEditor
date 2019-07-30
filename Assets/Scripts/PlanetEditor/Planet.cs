@@ -11,6 +11,8 @@ public class Planet : PersistantObject
     public KeyCode saveKey = KeyCode.S;
     public KeyCode loadKey = KeyCode.L;
 
+    Quaternion _originalRotation = Quaternion.identity;
+
     public static Planet instance {
         get { return _instance; }
     }
@@ -27,6 +29,7 @@ public class Planet : PersistantObject
 
         _cells = new List<Cell>();
         FillArray();
+        _originalRotation = transform.rotation;
     }
 
     /// <summary>
@@ -71,6 +74,8 @@ public class Planet : PersistantObject
     /// <param name="writer">The Binary Datas</param>
     public override void Save(GameDataWriter writer)
     {
+        transform.rotation = _originalRotation;
+
         writer.Write(_cells.Count);
         for (int i = 0; i < _cells.Count; i++)
         {
@@ -97,7 +102,7 @@ public class Planet : PersistantObject
         GUIStyle lCustomStyle = new GUIStyle("button");
         lCustomStyle.fontSize = 30;
 
-        if (GUILayout.Button("Open new Window...", lCustomStyle))
+        if (GUILayout.Button("Open Planet Editor...", lCustomStyle))
         {
             if (OnOpenWindow != null) OnOpenWindow();
         }

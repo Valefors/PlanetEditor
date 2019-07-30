@@ -12,4 +12,10 @@ public static class Enums
         WATER,
         EMPTY
     }
+
+    public enum MOUSE_FOCUS
+    {
+        IN_EDITOR,
+        INGAME
+    }
 }

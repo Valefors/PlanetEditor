@@ -5,10 +5,12 @@ using UnityEngine;
 
 public class LevelEditorWindow : EditorWindow
 {
-    string _titleFile = "LEVEL_01";
+    string _fileTile = "LEVEL_01";
     Planet _planet;
     PersistantStorage _storage;
     string _feedBack = "";
+    static Texture2D _titleScreen = null;
+    EditorWindow _window;
     //Color _color;
 
     //int _selGridInt = 0;
@@ -18,7 +20,15 @@ public class LevelEditorWindow : EditorWindow
     static void Init()
     {
         Planet.OnOpenWindow += ShowWindow;
+        _titleScreen = (Texture2D)Resources.Load("titleScreen", typeof(Texture2D));
     }
+
+    /*private void Awake()
+    {
+        Debug.Log("awake");
+        Planet.OnOpenWindow += ShowWindow;
+        _titleScreen = (Texture2D)Resources.Load("titleScreen", typeof(Texture2D));
+    }*/
 
     [MenuItem("Level Editor/Save Level")]
     public static void ShowWindow()
@@ -28,13 +38,18 @@ public class LevelEditorWindow : EditorWindow
 
     private void OnGUI()
     {
-        GUILayout.Space(10);
+        _window = new LevelEditorWindow();
+        _window.maxSize = new Vector2(440f, 600f);
+        _window.minSize = _window.maxSize;
+
+        GUI.Label(new Rect(10, 10, 400, 300), _titleScreen);
+        GUILayout.Space(300);
 
         GUILayout.Label("Save your level here.", EditorStyles.boldLabel);
 
         GUILayout.Space(10);
 
-        _titleFile = EditorGUILayout.TextField("Name", _titleFile);
+        _fileTile = EditorGUILayout.TextField("Name", _fileTile);
 
         GUILayout.Space(10);
         //_selGridInt = GUILayout.SelectionGrid(_selGridInt, _buttonsNamesArray, 3);
@@ -73,7 +88,7 @@ public class LevelEditorWindow : EditorWindow
     {
         if (Planet.instance != null)
         {
-            PersistantStorage.UpdateSaveName(_titleFile);
+            PersistantStorage.UpdateSaveName(_fileTile);
             Planet.instance.SaveDatas();
         }
     }

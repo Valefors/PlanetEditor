@@ -41,4 +41,9 @@ public class GameDataWriter
     {
         writer.Write((int)type);
     }
+
+    public void Write(string value)
+    {
+        writer.Write(value);
+    }
 }

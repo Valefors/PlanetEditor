@@ -48,4 +48,9 @@ public class GameDataReader
 
         return value;
     }
+
+    public string ReadString()
+    {
+        return reader.ReadString();
+    }
 }

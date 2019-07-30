@@ -5,6 +5,7 @@ using UnityEngine;
 public class InputManager : MonoBehaviour
 {
     GameObject _hooverObject = null;
+    public static Enums.MOUSE_FOCUS mouseFocusState = Enums.MOUSE_FOCUS.INGAME;
 
     // Update is called once per frame
     void Update()
@@ -16,6 +17,7 @@ public class InputManager : MonoBehaviour
         {
             if (Input.GetMouseButtonDown(0))
             {
+                mouseFocusState = Enums.MOUSE_FOCUS.INGAME;
                 EventsManager.Instance.Raise(new OnMouseClick(hit.transform.gameObject));
                 _hooverObject = null;
                 return;
