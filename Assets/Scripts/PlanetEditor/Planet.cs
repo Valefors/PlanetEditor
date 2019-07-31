@@ -8,9 +8,6 @@ public class Planet : PersistantObject
     public PersistantStorage storage;
     List<Cell> _cells;
 
-    public KeyCode saveKey = KeyCode.S;
-    public KeyCode loadKey = KeyCode.L;
-
     Quaternion _originalRotation = Quaternion.identity;
 
     public static Planet instance {
@@ -50,18 +47,6 @@ public class Planet : PersistantObject
         if (OnOpenWindow != null) OnOpenWindow();
     }
 
-    /*void Update()
-    {
-        if (Input.GetKeyDown(saveKey))
-        {
-            if (OnOpenWindow != null) OnOpenWindow();
-        }
-        else if (Input.GetKeyDown(loadKey))
-        {
-            storage.Load(this);
-        }
-    }*/
-
     public void SaveDatas()
     {
         storage.Save(this);
@@ -74,7 +59,7 @@ public class Planet : PersistantObject
     /// <param name="writer">The Binary Datas</param>
     public override void Save(GameDataWriter writer)
     {
-        transform.rotation = _originalRotation;
+        transform.rotation = _originalRotation; //We reset the planet's rotation to avoid false rotations during the saving
 
         writer.Write(_cells.Count);
         for (int i = 0; i < _cells.Count; i++)
@@ -102,7 +87,7 @@ public class Planet : PersistantObject
         GUIStyle lCustomStyle = new GUIStyle("button");
         lCustomStyle.fontSize = 30;
 
-        if (GUILayout.Button("Open Planet Editor...", lCustomStyle))
+        if (GUILayout.Button(Text.OPEN_EDITOR, lCustomStyle))
         {
             if (OnOpenWindow != null) OnOpenWindow();
         }

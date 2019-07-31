@@ -96,7 +96,6 @@ public class PlanetInteraction : MonoBehaviour
         }
 
         clickedCells.Clear();
-        print(clickedCells.Count);
 
         if (_clickedCell != null)
         {

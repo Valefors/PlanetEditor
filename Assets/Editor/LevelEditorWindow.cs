@@ -23,13 +23,6 @@ public class LevelEditorWindow : EditorWindow
         _titleScreen = (Texture2D)Resources.Load("titleScreen", typeof(Texture2D));
     }
 
-    /*private void Awake()
-    {
-        Debug.Log("awake");
-        Planet.OnOpenWindow += ShowWindow;
-        _titleScreen = (Texture2D)Resources.Load("titleScreen", typeof(Texture2D));
-    }*/
-
     [MenuItem("Level Editor/Save Level")]
     public static void ShowWindow()
     {
@@ -52,8 +45,6 @@ public class LevelEditorWindow : EditorWindow
         _fileTile = EditorGUILayout.TextField("Name", _fileTile);
 
         GUILayout.Space(10);
-        //_selGridInt = GUILayout.SelectionGrid(_selGridInt, _buttonsNamesArray, 3);
-        //_color = EditorGUILayout.ColorField("Color", _color);
 
         GUILayout.BeginHorizontal("Box");
         if (GUILayout.Button("Save Level"))
@@ -95,7 +86,7 @@ public class LevelEditorWindow : EditorWindow
 
     void LoadFile()
     {
-        string path = EditorUtility.OpenFilePanel("Choose a save", "", "");
+        string path = EditorUtility.OpenFilePanel(Text.OPEN_FILE, "", "");
         Planet.instance.storage.Load(path, Planet.instance);
     }
 }

@@ -46,4 +46,11 @@ public class GameDataWriter
     {
         writer.Write(value);
     }
+
+    public void Write(GameObject type)
+    {
+        Write(type.name);
+        Write(type.transform.position);
+        Write(type.transform.rotation);
+    }
 }

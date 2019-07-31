@@ -53,4 +53,14 @@ public class GameDataReader
     {
         return reader.ReadString();
     }
+
+    public GameObject ReadGameObject()
+    {
+        GameObject value = new GameObject();
+        value.name = ReadString();
+        value.transform.position = ReadVector3();
+        value.transform.rotation = ReadQuaternion();
+
+        return value;
+    }
 }

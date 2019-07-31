@@ -7,37 +7,59 @@ using UnityEngine;
 public class CellEditor : Editor
 {
     [SerializeField] List<GameObject> paletteProps = new List<GameObject>();
-    string path = "Assets/Editor Default Resources/PropsPalette";
+    string path = Text.PROPS_PALETTE_PATH;
+
     int _paletteIndex = 0;
     int _previousIndex = 0;
+
     Cell script = null;
-    /// <summary>
-    /// Show new variables in the custom inspectors when we click on the cell
-    /// Hide them when we unclick
-    /// </summary>
+
     public override void OnInspectorGUI()
     {
         DrawDefaultInspector();
         RefreshPalette();
         script = (Cell)target;
 
+        // Show new variables in the custom inspectors when we click on the cell
         if (script.isClicked)
         {
             script.type = (Enums.CELL_TYPE)EditorGUILayout.EnumPopup("Tile Type", script.type);
-            Palette();
+            DisplayPalette();
         }
     }
 
     void RefreshPalette()
     {
         paletteProps.Clear();
-        string[] prefabFiles = System.IO.Directory.GetFiles(path, "*.prefab");
+        string lPath = path;
+        script = (Cell)target;
 
+        switch (script.type)
+        {
+            case Enums.CELL_TYPE.EMPTY:
+                break;
+
+            case Enums.CELL_TYPE.GRASS:
+                lPath = path + "/GRASS";
+                break;
+
+            case Enums.CELL_TYPE.ROCK:
+                lPath = path + "/ROCK";
+                break;
+
+            case Enums.CELL_TYPE.SAND:
+                lPath = path + "/SAND";
+                break;
+        }
+
+        string[] prefabFiles = System.IO.Directory.GetFiles(lPath, "*.prefab");
+
+        //We add all the prefabs in an array to display them on inspector
         foreach (string prefabFile in prefabFiles)
             paletteProps.Add(AssetDatabase.LoadAssetAtPath(prefabFile, typeof(GameObject)) as GameObject);
     }
 
-    void Palette()
+    void DisplayPalette()
     {
         List<GUIContent> paletteIcons = new List<GUIContent>();
 
@@ -52,7 +74,6 @@ public class CellEditor : Editor
         if (_paletteIndex == _previousIndex) return;
 
         InstantiatePalettePrefab();
-        Debug.Log(_paletteIndex);
     }
 
     void InstantiatePalettePrefab()
@@ -61,8 +82,6 @@ public class CellEditor : Editor
         GameObject lPrefab = paletteProps[_previousIndex];
 
         script.AddProp(lPrefab);
-
-        //Undo.RegisterCompleteObjectUndo(lGameObject, "");
 
         InputManager.mouseFocusState = Enums.MOUSE_FOCUS.IN_EDITOR;
     }
